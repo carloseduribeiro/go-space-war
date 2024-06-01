@@ -8,9 +8,10 @@ import (
 type Player struct {
 	image    *ebiten.Image
 	position Vector
+	game     *Game
 }
 
-func NewPlayer() *Player {
+func NewPlayer(game *Game) *Player {
 	image := assets.PlayerSprite
 	bounds := image.Bounds()
 	halfWidth := float64(bounds.Dx()) / 2
@@ -21,16 +22,28 @@ func NewPlayer() *Player {
 	return &Player{
 		image:    image,
 		position: position,
+		game:     game,
 	}
 }
 
 func (p *Player) Update() {
-  speed := 6.0
-  if (ebiten.IsKeyPressed(ebiten.KeyLeft)) {
-    p.position.X -= speed
-  } else if ebiten.IsKeyPressed(ebiten.KeyRight) {
-    p.position.X += speed
-  }
+	speed := 6.0
+	if ebiten.IsKeyPressed(ebiten.KeyLeft) {
+		p.position.X -= speed
+	} else if ebiten.IsKeyPressed(ebiten.KeyRight) {
+		p.position.X += speed
+	}
+	if ebiten.IsKeyPressed(ebiten.KeySpace) {
+		bounds := p.image.Bounds()
+		halfWidth := float64(bounds.Dx()) / 2
+		halfHeigth := float64(bounds.Dy()) / 2
+		laserSpawnPos := Vector{
+			p.position.X + halfWidth,
+			p.position.Y + halfHeigth,
+		}
+		laser := NewLaser(laserSpawnPos)
+		p.game.AddLaser(laser)
+	}
 }
 
 func (p *Player) Draw(screen *ebiten.Image) {
