@@ -44,6 +44,14 @@ func (g *Game) Update() error {
 			g.Reset()
 		}
 	}
+	for i, m := range g.meteors {
+		for j, l := range g.lasers {
+			if m.Collider().Intersects(l.Collider()) {
+				g.meteors = append(g.meteors[:i], g.meteors[i+1:]...)
+				g.lasers = append(g.lasers[:j], g.lasers[j+1:]...)
+			}
+		}
+	}
 	return nil
 }
 
