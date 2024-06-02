@@ -36,3 +36,8 @@ func (m *Meteor) Draw(screen *ebiten.Image) {
 	op.GeoM.Translate(m.position.X, m.position.Y)
 	screen.DrawImage(m.image, op)
 }
+
+func (m *Meteor) Collider() Rectangle {
+	bounds := m.image.Bounds()
+	return NewRectangle(m.position.X, m.position.Y, float64(bounds.Dx()), float64(bounds.Dy()))
+}

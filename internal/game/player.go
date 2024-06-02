@@ -55,3 +55,8 @@ func (p *Player) Draw(screen *ebiten.Image) {
 	op.GeoM.Translate(p.position.X, p.position.Y)
 	screen.DrawImage(p.image, op)
 }
+
+func (p *Player) Collider() Rectangle {
+	bounds := p.image.Bounds()
+	return NewRectangle(p.position.X, p.position.Y, float64(bounds.Dx()), float64(bounds.Dy()))
+}
