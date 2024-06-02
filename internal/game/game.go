@@ -1,9 +1,13 @@
 package game
 
 import (
+	"fmt"
+	"image/color"
 	"log/slog"
 
+	"github.com/carloseduribeiro/go-space-war/internal/assets"
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/text/v2"
 )
 
 type Game struct {
@@ -11,6 +15,7 @@ type Game struct {
 	lasers           []*Laser
 	meteors          []*Meteor
 	meteorSpawnTimer *Timer
+	score            int
 }
 
 func NewGame() *Game {
@@ -49,6 +54,7 @@ func (g *Game) Update() error {
 			if m.Collider().Intersects(l.Collider()) {
 				g.meteors = append(g.meteors[:i], g.meteors[i+1:]...)
 				g.lasers = append(g.lasers[:j], g.lasers[j+1:]...)
+				g.score += 1
 			}
 		}
 	}
@@ -63,7 +69,10 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	for _, m := range g.meteors {
 		m.Draw(screen)
 	}
-
+	drawOp := text.DrawOptions{}
+	drawOp.GeoM.Translate(10, 10)
+	drawOp.ColorScale.ScaleWithColor(color.White)
+	text.Draw(screen, fmt.Sprintf("Points: %d", g.score), assets.FontUi, &drawOp)
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {

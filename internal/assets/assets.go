@@ -7,6 +7,7 @@ import (
 	"io/fs"
 
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/text/v2"
 	"golang.org/x/image/font"
 	"golang.org/x/image/font/opentype"
 )
@@ -54,7 +55,7 @@ func mustLoadImages(path string) []*ebiten.Image {
 	return images
 }
 
-func mustLoadFont(name string) font.Face {
+func mustLoadFont(name string) text.Face {
 	f, err := assets.ReadFile(name)
 	if err != nil {
 		panic(err)
@@ -73,6 +74,5 @@ func mustLoadFont(name string) font.Face {
 	if err != nil {
 		panic(err)
 	}
-
-	return face
+	return text.NewGoXFace(face)
 }
